@@ -5,6 +5,9 @@ const User =
         entity('User', {
           id: id(String),
           nickname: field(String),
+          email: field(String, {
+            validation: {presence: true, email: true}
+          }),
           registrationNumber: field(Number),
           password: field(String, { validation: { presence: true, length: { minimum: 4 } } })
         })

@@ -4,6 +4,7 @@ const { json } = require('body-parser')
 const { generateRoutes, generateControllers } = require('@herbsjs/herbs2rest')
 const { herbarium } = require('@herbsjs/herbarium')
 const controller = require('./controller')
+const healthCheck = require('../../../domain/usecases/health')
 
 async function rest(app, config) {
 
@@ -14,13 +15,13 @@ async function rest(app, config) {
     const controllers = generateControllers({ herbarium, controller })
 
     // Add custom controllers
-    // controllers.push({
-    //     name: 'Search',
-    //     post: {
-    //         usecase: herbarium.usecases.get('SearchTask').usecase,
-    //         controller: searchController
-    //     }
-    // })
+    controllers.push({
+        name: 'Health',
+        getAll: {
+            usecase: healthCheck(),
+            controller: controller
+        }
+    })
 
     const routes = new express.Router()
     const showEndpoints = !config.isProd
